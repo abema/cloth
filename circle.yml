@@ -1,0 +1,17 @@
+dependencies:
+  pre:
+    - go get golang.org/x/tools/cmd/vet
+    - go get golang.org/x/tools/cmd/cover
+    - go get github.com/golang/lint/golint
+    - go get github.com/tools/godep
+  override:
+    - godep restore
+
+test:
+  pre:
+    - go vet ./...
+    - golint ./... | xargs -r false
+  override:
+    - go test -v -coverprofile=coverage.txt -covermode=count ./...
+  post:
+    - bash <(curl -s https://codecov.io/bash)
