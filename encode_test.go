@@ -150,14 +150,14 @@ func TestStom(t *testing.T) {
 			var vv float32
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 3.2 {
-				t.Errorf("expected %d got %d", 3.2, vv)
+				t.Errorf("expected %v got %v", 3.2, vv)
 			}
 
 		case "tfloat64":
 			var vv float64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 6.4 {
-				t.Errorf("expected %d got %d", 6.4, vv)
+				t.Errorf("expected %v got %v", 6.4, vv)
 			}
 
 		default:
