@@ -23,6 +23,16 @@ func Stom(family string, ts bigtable.Timestamp, i interface{}) (m *bigtable.Muta
 // SetColumns sets columns of Mutation by struct.
 func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable.Mutation) (err error) {
 
+	if family == "" {
+		err = fmt.Errorf("cloth: family is empty")
+		return
+	}
+
+	if i == nil {
+		err = fmt.Errorf("cloth: struct is nil")
+		return
+	}
+
 	fs := structs.New(i).Fields()
 	if len(fs) == 0 {
 		err = fmt.Errorf("cloth: fields are not found, %v", i)
