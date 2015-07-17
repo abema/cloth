@@ -38,18 +38,19 @@ func TestStom(t *testing.T) {
 		t.Error("error isn't occurred")
 	}
 
-
-
 	s := struct {
-		TString  string `bigtable:"tstr"`
-		TInt     int64  `bigtable:"tint"`
-		TBool    bool   `bigtable:"tbool"`
-		TOmitStr string `bigtable:"tomitstr, omitempty"`
-		TOmitInt int    `bigtable:"tomitint, omitempty"`
-		TIgnore  int64  `bigtable:"-"`
-		TInt8    int8   `bigtable:"tint8"`
-		TInt16   int16  `bigtable:"tint16"`
-		TInt32   int32  `bigtable:"tint32"`
+		TString  string  `bigtable:"tstr"`
+		TInt     int     `bigtable:"tint"`
+		TBool    bool    `bigtable:"tbool"`
+		TOmitStr string  `bigtable:"tomitstr, omitempty"`
+		TOmitInt int     `bigtable:"tomitint, omitempty"`
+		TIgnore  int64   `bigtable:"-"`
+		TInt8    int8    `bigtable:"tint8"`
+		TInt16   int16   `bigtable:"tint16"`
+		TInt32   int32   `bigtable:"tint32"`
+		TInt64   int64   `bigtable:"tint64"`
+		TFloat32 float32 `bigtable:"tfloat32"`
+		TFloat64 float64 `bigtable:"tfloat64"`
 		TNonTag  string
 	}{
 		TString:  "test1",
@@ -60,6 +61,9 @@ func TestStom(t *testing.T) {
 		TInt8:    8,
 		TInt16:   16,
 		TInt32:   32,
+		TInt64:   64,
+		TFloat32: 3.2,
+		TFloat64: 6.4,
 		TNonTag:  "test3",
 	}
 
@@ -69,7 +73,7 @@ func TestStom(t *testing.T) {
 	}
 
 	ops := reflect.ValueOf(ret).Elem().FieldByName("ops")
-	if ops.Len() != 7 {
+	if ops.Len() != 10 {
 		t.Errorf("expected ops length is %d got %d", 7, ops.Len())
 	}
 
@@ -89,7 +93,7 @@ func TestStom(t *testing.T) {
 		case "tint":
 			var vv int64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
-			if vv != 100 {
+			if int(vv) != 100 {
 				t.Errorf("expected %d got %d", 100, vv)
 			}
 
@@ -124,6 +128,27 @@ func TestStom(t *testing.T) {
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 32 {
 				t.Errorf("expected %d got %d", 32, vv)
+			}
+
+		case "tint64":
+			var vv int64
+			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
+			if vv != 64 {
+				t.Errorf("expected %d got %d", 64, vv)
+			}
+
+		case "tfloat32":
+			var vv float32
+			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
+			if vv != 3.2 {
+				t.Errorf("expected %d got %d", 3.2, vv)
+			}
+
+		case "tfloat64":
+			var vv float64
+			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
+			if vv != 6.4 {
+				t.Errorf("expected %d got %d", 6.4, vv)
 			}
 
 		default:

@@ -98,21 +98,30 @@ func getBytes(f *structs.Field) ([]byte, error) {
 		return boolconv.NewBool((f.Value()).(bool)).Bytes(), nil
 
 	case reflect.Int8, reflect.Uint8:
-		b = bytes.NewBuffer(make([]byte, 0, 1))
-
-	case reflect.Int16, reflect.Uint16:
 		b = bytes.NewBuffer(make([]byte, 0, 2))
 
-	case reflect.Int32, reflect.Uint32, reflect.Float32:
-		b = bytes.NewBuffer(make([]byte, 0, 4))
+	case reflect.Int16, reflect.Uint16:
+		b = bytes.NewBuffer(make([]byte, 0, binary.MaxVarintLen16))
 
-	case reflect.Int64, reflect.Uint64, reflect.Float64, reflect.Int, reflect.Uintptr:
-		b = bytes.NewBuffer(make([]byte, 0, 8))
+	case reflect.Int32, reflect.Uint32:
+		b = bytes.NewBuffer(make([]byte, 0, binary.MaxVarintLen32))
+
+	case reflect.Int64, reflect.Uint64, reflect.Int, reflect.Uint, reflect.Float32, reflect.Float64:
+		b = bytes.NewBuffer(make([]byte, 0, binary.MaxVarintLen64))
 
 	}
 
 	if b != nil {
-		err := binary.Write(b, binary.BigEndian, f.Value())
+
+		i := f.Value()
+		if f.Kind() == reflect.Int {
+			i = int64(i.(int))
+		}
+		if f.Kind() == reflect.Uint {
+			i = uint64(i.(uint))
+		}
+
+		err := binary.Write(b, binary.BigEndian, i)
 		return b.Bytes(), err
 	}
 
