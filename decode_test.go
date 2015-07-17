@@ -18,7 +18,7 @@ func TestReadItems(t *testing.T) {
 	}
 
 	s := struct {
-		TNonTag  string  `bigtable:"nontag"`
+		TNonTag  string
 		TString  string  `bigtable:"tstr"`
 		TBool    bool    `bigtable:"tbool"`
 		TInt     int     `bigtable:"tint"`

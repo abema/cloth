@@ -41,6 +41,7 @@ func TestStom(t *testing.T) {
 	s := struct {
 		TString  string  `bigtable:"tstr"`
 		TInt     int     `bigtable:"tint"`
+		TUint    uint    `bigtable:"tuint"`
 		TBool    bool    `bigtable:"tbool"`
 		TOmitStr string  `bigtable:"tomitstr, omitempty"`
 		TOmitInt int     `bigtable:"tomitint, omitempty"`
@@ -55,6 +56,7 @@ func TestStom(t *testing.T) {
 	}{
 		TString:  "test1",
 		TInt:     100,
+		TUint:    200,
 		TBool:    true,
 		TOmitStr: "test2",
 		TIgnore:  1000,
@@ -73,8 +75,8 @@ func TestStom(t *testing.T) {
 	}
 
 	ops := reflect.ValueOf(ret).Elem().FieldByName("ops")
-	if ops.Len() != 10 {
-		t.Errorf("expected ops length is %d got %d", 7, ops.Len())
+	if ops.Len() != 11 {
+		t.Errorf("expected ops length is %d got %d", 11, ops.Len())
 	}
 
 	for i := 0; i < ops.Len(); i++ {
@@ -95,6 +97,13 @@ func TestStom(t *testing.T) {
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if int(vv) != 100 {
 				t.Errorf("expected %d got %d", 100, vv)
+			}
+
+		case "tuint":
+			var vv uint64
+			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
+			if uint(vv) != 200 {
+				t.Errorf("expected %d got %d", 200, vv)
 			}
 
 		case "tbool":
