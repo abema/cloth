@@ -14,7 +14,7 @@ import (
 // ReadItems converts Mutation into Struct.
 func ReadItems(ris []*bigtable.ReadItem, s interface{}) (err error) {
 
-	if len(ris) == 0 {
+	if len(ris) == 0 || s == nil {
 		return
 	}
 

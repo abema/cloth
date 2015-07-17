@@ -12,6 +12,11 @@ import (
 
 func TestReadItems(t *testing.T) {
 
+	err := ReadItems(nil, nil)
+	if err != nil {
+		t.Error("error should be nil")
+	}
+
 	s := struct {
 		TString  string `bigtable:"tstr"`
 		TInt     int64  `bigtable:"tint"`
@@ -46,7 +51,12 @@ func TestReadItems(t *testing.T) {
 		},
 	}
 
-	err := ReadItems(ris, &s)
+	err = ReadItems(ris, struct{}{})
+	if err != nil {
+		t.Error("error should be nil")
+	}
+
+	err = ReadItems(ris, &s)
 	if err != nil {
 		t.Error("error should not be nil")
 	}
