@@ -10,12 +10,37 @@ import (
 	"google.golang.org/cloud/bigtable"
 )
 
-func TestReadItems(t *testing.T) {
+func TestReadItemsErrorCase(t *testing.T) {
+
+	s := struct {
+		T int `bigtable:"test"`
+	}{}
 
 	err := ReadItems(nil, nil)
 	if err != nil {
 		t.Error("error should be nil")
 	}
+
+	ris := []*bigtable.ReadItem{
+		&bigtable.ReadItem{
+			Column: "test",
+			Value:  []byte("test"),
+		},
+	}
+
+	err = ReadItems(ris, struct{}{})
+	if err != nil {
+		t.Error("error should be nil")
+	}
+
+	err = ReadItems(ris, &s)
+	if err == nil {
+		t.Error("error is occurred")
+	}
+
+}
+
+func TestReadItems(t *testing.T) {
 
 	s := struct {
 		TNonTag  string
@@ -37,6 +62,8 @@ func TestReadItems(t *testing.T) {
 
 	str := "hoge"
 	bl := true
+	num := 123
+	buf := &bytes.Buffer{}
 
 	ris := []*bigtable.ReadItem{
 		&bigtable.ReadItem{
@@ -48,14 +75,6 @@ func TestReadItems(t *testing.T) {
 			Value:  boolconv.NewBool(bl).Bytes(),
 		},
 	}
-
-	err = ReadItems(ris, struct{}{})
-	if err != nil {
-		t.Error("error should be nil")
-	}
-
-	num := 123
-	buf := &bytes.Buffer{}
 
 	binary.Write(buf, binary.BigEndian, int64(num))
 	ris = append(ris, &bigtable.ReadItem{
@@ -140,7 +159,7 @@ func TestReadItems(t *testing.T) {
 		Value:  buf.Bytes(),
 	})
 
-	err = ReadItems(ris, &s)
+	err := ReadItems(ris, &s)
 	if err != nil {
 		t.Error("error should not be nil")
 	}
