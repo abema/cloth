@@ -16,7 +16,7 @@
 		},
 		{
 			"ImportPath": "github.com/osamingo/boolconv",
-			"Rev": "c6d84de9dfc4db7ec2683feb0360a798741676e2"
+			"Rev": "f13995c64226d151c05384be1701dc6e0cf2849c"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
