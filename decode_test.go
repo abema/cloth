@@ -21,8 +21,8 @@ func TestReadItemsErrorCase(t *testing.T) {
 		t.Error("error should be nil")
 	}
 
-	ris := []*bigtable.ReadItem{
-		&bigtable.ReadItem{
+	ris := []bigtable.ReadItem{
+		bigtable.ReadItem{
 			Column: "test",
 			Value:  []byte("test"),
 		},
@@ -65,96 +65,96 @@ func TestReadItems(t *testing.T) {
 	num := 123
 	buf := &bytes.Buffer{}
 
-	ris := []*bigtable.ReadItem{
-		&bigtable.ReadItem{
+	ris := []bigtable.ReadItem{
+		bigtable.ReadItem{
 			Column: "tstr",
 			Value:  []byte(str),
 		},
-		&bigtable.ReadItem{
+		bigtable.ReadItem{
 			Column: "tbool",
 			Value:  boolconv.NewBool(bl).Bytes(),
 		},
 	}
 
 	binary.Write(buf, binary.BigEndian, int64(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tint",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int8(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tint8",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int16(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tint16",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int32(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tint32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int64(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tint64",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint64(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tuint",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint8(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tuint8",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint16(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tuint16",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint32(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tuint32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint64(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tuint64",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, float32(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tfloat32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, float64(num))
-	ris = append(ris, &bigtable.ReadItem{
+	ris = append(ris, bigtable.ReadItem{
 		Column: "tfloat64",
 		Value:  buf.Bytes(),
 	})
