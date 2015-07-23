@@ -5,8 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"reflect"
-	"strings"
-	"unicode"
 
 	"github.com/fatih/structs"
 	"github.com/osamingo/boolconv"
@@ -41,7 +39,7 @@ func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable
 
 	for _, f := range fs {
 
-		t := f.Tag(tag)
+		t := f.Tag(tagName)
 		if t == "" {
 			continue
 		}
@@ -59,27 +57,6 @@ func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable
 		}
 
 		m.Set(family, ti.Column, ts, b)
-	}
-
-	return
-}
-
-func getTagInfo(tag string) (ti tagInfo) {
-
-	ss := strings.FieldsFunc(tag, func(c rune) bool {
-		return c == delimiter || unicode.IsSpace(c)
-	})
-
-	for _, s := range ss {
-		if s == ignore {
-			ti.Ignore = true
-			return
-		}
-		if s == omitempty {
-			ti.Omitempty = true
-			continue
-		}
-		ti.Column = s
 	}
 
 	return

@@ -23,7 +23,7 @@ func TestReadItemsErrorCase(t *testing.T) {
 
 	ris := []bigtable.ReadItem{
 		bigtable.ReadItem{
-			Column: "test",
+			Column: "fc:test",
 			Value:  []byte("test"),
 		},
 	}
@@ -44,6 +44,7 @@ func TestReadItems(t *testing.T) {
 
 	s := struct {
 		TNonTag  string
+		TRowKey  string  `bigtable:",rowkey"`
 		TString  string  `bigtable:"tstr"`
 		TBool    bool    `bigtable:"tbool"`
 		TInt     int     `bigtable:"tint"`
@@ -60,6 +61,7 @@ func TestReadItems(t *testing.T) {
 		TFloat64 float64 `bigtable:"tfloat64"`
 	}{}
 
+	key := "thisisrowkey"
 	str := "hoge"
 	bl := true
 	num := 123
@@ -67,101 +69,119 @@ func TestReadItems(t *testing.T) {
 
 	ris := []bigtable.ReadItem{
 		bigtable.ReadItem{
-			Column: "tstr",
+			Row:    key,
+			Column: "fc:tstr",
 			Value:  []byte(str),
 		},
 		bigtable.ReadItem{
-			Column: "tbool",
+			Row:    key,
+			Column: "fc:tbool",
 			Value:  boolconv.NewBool(bl).Bytes(),
 		},
 	}
 
 	binary.Write(buf, binary.BigEndian, int64(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tint",
+		Row:    key,
+		Column: "fc:tint",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int8(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tint8",
+		Row:    key,
+		Column: "fc:tint8",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int16(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tint16",
+		Row:    key,
+		Column: "fc:tint16",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int32(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tint32",
+		Row:    key,
+		Column: "fc:tint32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, int64(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tint64",
+		Row:    key,
+		Column: "fc:tint64",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint64(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tuint",
+		Row:    key,
+		Column: "fc:tuint",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint8(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tuint8",
+		Row:    key,
+		Column: "fc:tuint8",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint16(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tuint16",
+		Row:    key,
+		Column: "fc:tuint16",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint32(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tuint32",
+		Row:    key,
+		Column: "fc:tuint32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, uint64(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tuint64",
+		Row:    key,
+		Column: "fc:tuint64",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, float32(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tfloat32",
+		Row:    key,
+		Column: "fc:tfloat32",
 		Value:  buf.Bytes(),
 	})
 
 	buf = &bytes.Buffer{}
 	binary.Write(buf, binary.BigEndian, float64(num))
 	ris = append(ris, bigtable.ReadItem{
-		Column: "tfloat64",
+		Row:    key,
+		Column: "fc:tfloat64",
 		Value:  buf.Bytes(),
 	})
 
 	err := ReadItems(ris, &s)
 	if err != nil {
 		t.Error("error should not be nil")
+	}
+
+	if s.TRowKey != key {
+		t.Errorf("expected %s got %s", key, s.TRowKey)
 	}
 
 	if s.TString != str {
