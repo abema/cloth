@@ -16,6 +16,10 @@ func TestReadItemsErrorCase(t *testing.T) {
 		T int `bigtable:"test"`
 	}{}
 
+	r := struct {
+		R bigtable.ReadItem `bigtable:",rowkey"`
+	}{}
+
 	err := ReadItems(nil, nil)
 	if err != nil {
 		t.Error("error should be nil")
@@ -23,6 +27,7 @@ func TestReadItemsErrorCase(t *testing.T) {
 
 	ris := []bigtable.ReadItem{
 		bigtable.ReadItem{
+			Row:    "rowkey",
 			Column: "fc:test",
 			Value:  []byte("test"),
 		},
@@ -34,6 +39,11 @@ func TestReadItemsErrorCase(t *testing.T) {
 	}
 
 	err = ReadItems(ris, &s)
+	if err == nil {
+		t.Error("error is occurred")
+	}
+
+	err = ReadItems(ris, &r)
 	if err == nil {
 		t.Error("error is occurred")
 	}

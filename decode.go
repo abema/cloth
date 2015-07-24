@@ -3,6 +3,7 @@ package cloth
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 	"reflect"
 
 	"strings"
@@ -127,6 +128,10 @@ func setValue(f *structs.Field, val []byte) (err error) {
 		var n float64
 		err = binary.Read(bytes.NewReader(val), binary.BigEndian, &n)
 		f.Set(n)
+
+	default:
+		err = fmt.Errorf("cloth: unsupported type. %v", f.Kind())
+
 	}
 
 	return
