@@ -10,25 +10,25 @@ import (
 	"google.golang.org/cloud/bigtable"
 )
 
-func TestStom(t *testing.T) {
+func TestGenerateMutation(t *testing.T) {
 
 	// family is empty
-	if _, err := Stom("", bigtable.Now(), nil); err == nil {
+	if _, err := GenerateMutation("", bigtable.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct is nil
-	if _, err := Stom("fc", bigtable.Now(), nil); err == nil {
+	if _, err := GenerateMutation("fc", bigtable.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct hasn't fields
-	if _, err := Stom("fc", bigtable.Now(), struct{}{}); err == nil {
+	if _, err := GenerateMutation("fc", bigtable.Now(), struct{}{}); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// filed is unsupported type
-	if _, err := Stom("fc", bigtable.Now(), struct {
+	if _, err := GenerateMutation("fc", bigtable.Now(), struct {
 		S map[string]interface{} `bigtable:"wrong"`
 	}{
 		map[string]interface{}{
@@ -69,7 +69,7 @@ func TestStom(t *testing.T) {
 		TNonTag:  "test3",
 	}
 
-	ret, err := Stom("fc", bigtable.Now(), &s)
+	ret, err := GenerateMutation("fc", bigtable.Now(), &s)
 	if err != nil {
 		t.Error("failed to Stom. msg =", err)
 	}

@@ -11,8 +11,8 @@ import (
 	"google.golang.org/cloud/bigtable"
 )
 
-// Stom converts Struct into Mutation.
-func Stom(family string, ts bigtable.Timestamp, i interface{}) (m *bigtable.Mutation, err error) {
+// GenerateMutation generates Mutation from Struct.
+func GenerateMutation(family string, ts bigtable.Timestamp, i interface{}) (m *bigtable.Mutation, err error) {
 	m = bigtable.NewMutation()
 	err = SetColumns(family, ts, i, m)
 	return

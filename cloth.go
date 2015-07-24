@@ -20,20 +20,20 @@ func getTagInfo(tag string) (ti tagInfo) {
 		return c == ',' || unicode.IsSpace(c)
 	})
 
-	for _, s := range ss {
-		if s == "-" {
+	for i := range ss {
+		if ss[i] == "-" {
 			ti.Ignore = true
 			return
 		}
-		if s == "omitempty" && len(ss) > 1 {
-			ti.Omitempty = true
-			continue
-		}
-		if s == "rowkey" && len(ss) == 1 {
+		if ss[i] == "rowkey" && len(ss) == 1 {
 			ti.RowKey = true
 			continue
 		}
-		ti.Column = s
+		if ss[i] == "omitempty" && len(ss) > 1 {
+			ti.Omitempty = true
+			continue
+		}
+		ti.Column = ss[i]
 	}
 
 	return
