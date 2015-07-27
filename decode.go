@@ -43,7 +43,7 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 				continue
 			}
 
-			cs := strings.Split(ri.Column, ":")
+			cs := strings.Split(ri.Column, delimiter)
 			if cs[len(cs)-1] == ti.Column {
 				if err = setValue(f, ri.Value); err != nil {
 					return

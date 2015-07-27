@@ -18,7 +18,7 @@ func GenerateMutation(family string, ts bigtable.Timestamp, i interface{}) (m *b
 	return
 }
 
-// SetColumns sets columns of Mutation by struct.
+// SetColumns sets columns of Mutation by Struct.
 func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable.Mutation) (err error) {
 
 	if family == "" {
@@ -56,6 +56,9 @@ func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable
 			break
 		}
 
+		if ColumnQualifierPrefix != "" {
+			ti.Column = ColumnQualifierPrefix + delimiter + ti.Column
+		}
 		m.Set(family, ti.Column, ts, b)
 	}
 

@@ -12,7 +12,13 @@ type tagInfo struct {
 	Column    string
 }
 
-const tagName = "bigtable"
+const (
+	tagName   = "bigtable"
+	delimiter = ":"
+)
+
+// ColumnQualifierPrefix is a prefix of column qualifier.
+var ColumnQualifierPrefix string
 
 func getTagInfo(tag string) (ti tagInfo) {
 
