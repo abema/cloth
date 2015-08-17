@@ -39,12 +39,12 @@ func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable
 
 	for _, f := range fs {
 
-		t := f.Tag(tagName)
+		t := f.Tag(BigtableTagName)
 		if t == "" {
 			continue
 		}
 
-		ti := getTagInfo(t)
+		ti := GetBigtableTagInfo(t)
 		if ti.Ignore || ti.Column == "" || ti.Omitempty && f.IsZero() {
 			continue
 		}
@@ -57,7 +57,7 @@ func SetColumns(family string, ts bigtable.Timestamp, i interface{}, m *bigtable
 		}
 
 		if ColumnQualifierPrefix != "" {
-			ti.Column = ColumnQualifierPrefix + delimiter + ti.Column
+			ti.Column = ColumnQualifierPrefix + ColumnQualifierDelimiter + ti.Column
 		}
 		m.Set(family, ti.Column, ts, b)
 	}

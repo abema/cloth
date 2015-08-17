@@ -29,12 +29,12 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 
 		for _, f := range fs {
 
-			t := f.Tag(tagName)
+			t := f.Tag(BigtableTagName)
 			if t == "" {
 				continue
 			}
 
-			ti := getTagInfo(t)
+			ti := GetBigtableTagInfo(t)
 			if ti.RowKey {
 				if err = setValue(f, []byte(ri.Row)); err != nil {
 					return
@@ -43,7 +43,7 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 				continue
 			}
 
-			cs := strings.Split(ri.Column, delimiter)
+			cs := strings.Split(ri.Column, ColumnQualifierDelimiter)
 			if cs[len(cs)-1] == ti.Column {
 				if err = setValue(f, ri.Value); err != nil {
 					return

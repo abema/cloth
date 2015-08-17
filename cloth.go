@@ -5,7 +5,8 @@ import (
 	"unicode"
 )
 
-type tagInfo struct {
+// TagInfo is a field tag information.
+type TagInfo struct {
 	Ignore    bool
 	Omitempty bool
 	RowKey    bool
@@ -13,14 +14,17 @@ type tagInfo struct {
 }
 
 const (
-	tagName   = "bigtable"
-	delimiter = ":"
+	// BigtableTagName is a "bigtable"
+	BigtableTagName = "bigtable"
+	// ColumnQualifierDelimiter is a ":"
+	ColumnQualifierDelimiter = ":"
 )
 
 // ColumnQualifierPrefix is a prefix of column qualifier.
 var ColumnQualifierPrefix string
 
-func getTagInfo(tag string) (ti tagInfo) {
+// GetBigtableTagInfo gets TagInfo by a field tag.
+func GetBigtableTagInfo(tag string) (ti TagInfo) {
 
 	ss := strings.FieldsFunc(tag, func(c rune) bool {
 		return c == ',' || unicode.IsSpace(c)

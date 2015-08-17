@@ -89,74 +89,74 @@ func TestGenerateMutation(t *testing.T) {
 
 		switch string(c) {
 
-		case ColumnQualifierPrefix + delimiter + "tstr":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tstr":
 			vv := string(v)
 			if vv != "test1" {
 				t.Errorf("expected %s got %s", "test1", vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tint":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint":
 			var vv int64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if int(vv) != 100 {
 				t.Errorf("expected %d got %d", 100, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tuint":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tuint":
 			var vv uint64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if uint(vv) != 200 {
 				t.Errorf("expected %d got %d", 200, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tbool":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tbool":
 			vv := boolconv.BtoB(v)
 			if vv != boolconv.True {
 				t.Errorf("expected %v got %v", boolconv.True, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tomitstr":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tomitstr":
 			vv := string(v)
 			if vv != "test2" {
 				t.Errorf("expected %s got %s", "test2", vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tint8":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint8":
 			var vv int8
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 8 {
 				t.Errorf("expected %d got %d", 8, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tint16":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint16":
 			var vv int16
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 16 {
 				t.Errorf("expected %d got %d", 16, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tint32":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint32":
 			var vv int32
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 32 {
 				t.Errorf("expected %d got %d", 32, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tint64":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint64":
 			var vv int64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 64 {
 				t.Errorf("expected %d got %d", 64, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tfloat32":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tfloat32":
 			var vv float32
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 3.2 {
 				t.Errorf("expected %v got %v", 3.2, vv)
 			}
 
-		case ColumnQualifierPrefix + delimiter + "tfloat64":
+		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tfloat64":
 			var vv float64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 6.4 {
