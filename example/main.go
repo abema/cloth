@@ -41,7 +41,7 @@ func init() {
 		panic(err)
 	}
 
-	conn, err := grpc.Dial(srv.Addr)
+	conn, err := grpc.Dial(srv.Addr, grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
@@ -77,7 +77,7 @@ func main() {
 	}
 
 	// dialing to test server
-	conn, err := grpc.Dial(srv.Addr)
+	conn, err := grpc.Dial(srv.Addr, grpc.WithInsecure())
 	if err != nil {
 		fmt.Println(err)
 		return

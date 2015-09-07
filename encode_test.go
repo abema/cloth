@@ -84,8 +84,9 @@ func TestGenerateMutation(t *testing.T) {
 
 	for i := 0; i < ops.Len(); i++ {
 
-		c := ops.Index(i).Elem().FieldByName("SetCell").Elem().FieldByName("ColumnQualifier").Bytes()
-		v := ops.Index(i).Elem().FieldByName("SetCell").Elem().FieldByName("Value").Bytes()
+		o := ops.Index(i).Elem().Field(0).Elem().Elem().Field(0).Elem()
+		c := o.FieldByName("ColumnQualifier").Bytes()
+		v := o.FieldByName("Value").Bytes()
 
 		switch string(c) {
 
