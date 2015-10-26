@@ -1,10 +1,9 @@
 package cloth
 
 import (
-	"testing"
-
 	"bytes"
 	"encoding/binary"
+	"testing"
 
 	"github.com/osamingo/boolconv"
 	"google.golang.org/cloud/bigtable"

@@ -21,6 +21,7 @@ const (
 	cf  = "myFamily"
 )
 
+// User data model.
 type User struct {
 	ID         string `bigtable:",rowkey"`
 	Name       string `bigtable:"name"`
@@ -92,7 +93,7 @@ func main() {
 	defer client.Close()
 
 	// generate Mutation
-	mutation, err := cloth.GenerateMutation(cf, bigtable.Now(), &user)
+	mutation, err := cloth.GenerateMutation(cf, time.Now(), &user)
 	if err != nil {
 		fmt.Println(err)
 		return

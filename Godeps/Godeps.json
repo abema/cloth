@@ -1,46 +1,46 @@
 {
 	"ImportPath": "github.com/abema/cloth",
-	"GoVersion": "go1.5",
+	"GoVersion": "go1.5.1",
 	"Deps": [
-		{
-			"ImportPath": "github.com/bradfitz/http2",
-			"Rev": "f8202bc903bda493ebba4aa54922d78430c2c42f"
-		},
 		{
 			"ImportPath": "github.com/fatih/structs",
 			"Rev": "a9f7daa9c2729e97450c2da2feda19130a367d8f"
 		},
 		{
 			"ImportPath": "github.com/golang/protobuf/proto",
-			"Rev": "1dceb1a2654bdc74ca97ad91f71f500eecc96269"
+			"Rev": "3d2510a4dd961caffa2ae781669c628d82db700a"
 		},
 		{
 			"ImportPath": "github.com/osamingo/boolconv",
-			"Rev": "f13995c64226d151c05384be1701dc6e0cf2849c"
+			"Rev": "6680dd755226debedf3bfdffaffa0b8bdadd2c34"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
-			"Rev": "db8e4de5b2d6653f66aea53094624468caad15d2"
+			"Rev": "47990a1ba55743e6ef1affd3a14e5bac8553615d"
+		},
+		{
+			"ImportPath": "golang.org/x/net/http2",
+			"Rev": "47990a1ba55743e6ef1affd3a14e5bac8553615d"
 		},
 		{
 			"ImportPath": "golang.org/x/net/internal/timeseries",
-			"Rev": "db8e4de5b2d6653f66aea53094624468caad15d2"
+			"Rev": "47990a1ba55743e6ef1affd3a14e5bac8553615d"
 		},
 		{
 			"ImportPath": "golang.org/x/net/trace",
-			"Rev": "db8e4de5b2d6653f66aea53094624468caad15d2"
+			"Rev": "47990a1ba55743e6ef1affd3a14e5bac8553615d"
 		},
 		{
 			"ImportPath": "golang.org/x/oauth2",
-			"Rev": "ad0128250e8fba646a92ca9129716e523d63ef9f"
+			"Rev": "2fbf3d7329d847b125188ad64b68cfb1f548938a"
 		},
 		{
 			"ImportPath": "google.golang.org/cloud",
-			"Rev": "5773690439e343a5da8d622cd7cdd7d1b11e846f"
+			"Rev": "00b4e85984cca3e33a131fcef593a54d2f86a2b3"
 		},
 		{
 			"ImportPath": "google.golang.org/grpc",
-			"Rev": "6b6127d8c67b67f9f8509b84279eac053964e868"
+			"Rev": "6c8d213d089b6bdddd4bd3648c33521c148a21e2"
 		}
 	]
 }
