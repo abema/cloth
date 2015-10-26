@@ -46,7 +46,7 @@ func SetColumns(family string, t time.Time, i interface{}, m *bigtable.Mutation)
 			continue
 		}
 
-		ti := getBigtableTagInfo(tg)
+		ti := GetBigtableTagInfo(tg)
 		if ti.Ignore || ti.Column == "" || ti.Omitempty && f.IsZero() {
 			continue
 		}

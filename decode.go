@@ -34,7 +34,7 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 				continue
 			}
 
-			ti := getBigtableTagInfo(t)
+			ti := GetBigtableTagInfo(t)
 			if ti.RowKey {
 				if err = setValue(f, []byte(ri.Row)); err != nil {
 					return
