@@ -23,8 +23,8 @@ const (
 // ColumnQualifierPrefix is a prefix of column qualifier.
 var ColumnQualifierPrefix string
 
-// GetBigtableTagInfo gets TagInfo by a field tag.
-func GetBigtableTagInfo(tag string) (ti TagInfo) {
+// getBigtableTagInfo gets TagInfo by a field tag.
+func getBigtableTagInfo(tag string) (ti TagInfo) {
 
 	ss := strings.FieldsFunc(tag, func(c rune) bool {
 		return c == ',' || unicode.IsSpace(c)

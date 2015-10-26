@@ -5,30 +5,30 @@ import (
 	"encoding/binary"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/osamingo/boolconv"
-	"google.golang.org/cloud/bigtable"
 )
 
 func TestGenerateMutation(t *testing.T) {
 
 	// family is empty
-	if _, err := GenerateMutation("", bigtable.Now(), nil); err == nil {
+	if _, err := GenerateMutation("", time.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct is nil
-	if _, err := GenerateMutation("fc", bigtable.Now(), nil); err == nil {
+	if _, err := GenerateMutation("fc", time.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct hasn't fields
-	if _, err := GenerateMutation("fc", bigtable.Now(), struct{}{}); err == nil {
+	if _, err := GenerateMutation("fc", time.Now(), struct{}{}); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// filed is unsupported type
-	if _, err := GenerateMutation("fc", bigtable.Now(), struct {
+	if _, err := GenerateMutation("fc", time.Now(), struct {
 		S map[string]interface{} `bigtable:"wrong"`
 	}{
 		map[string]interface{}{
@@ -72,7 +72,7 @@ func TestGenerateMutation(t *testing.T) {
 	// set prefix
 	ColumnQualifierPrefix = "pre"
 
-	ret, err := GenerateMutation("fc", bigtable.Now(), &s)
+	ret, err := GenerateMutation("fc", time.Now(), &s)
 	if err != nil {
 		t.Error("failed to Stom. msg =", err)
 	}
