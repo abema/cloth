@@ -15,13 +15,17 @@ import (
 
 // GenerateMutation generates Mutation from Struct.
 func GenerateMutation(family string, t time.Time, i interface{}) (m *bigtable.Mutation, err error) {
+
 	m = bigtable.NewMutation()
 	err = SetColumns(family, t, i, m)
+
 	return
 }
 
+
+
 // SetColumns sets columns of Mutation by Struct.
-func SetColumns(family string, t time.Time, i interface{}, m *bigtable.Mutation) (err error) {
+func SetColumns(family string, t time.Time, m *bigtable.Mutation, i interface{}) (err error) {
 
 	if family == "" {
 		err = fmt.Errorf("cloth: family is empty")
@@ -58,9 +62,6 @@ func SetColumns(family string, t time.Time, i interface{}, m *bigtable.Mutation)
 			break
 		}
 
-		if ColumnQualifierPrefix != "" {
-			ti.Column = ColumnQualifierPrefix + ColumnQualifierDelimiter + ti.Column
-		}
 		m.Set(family, ti.Column, bigtable.Time(t), b)
 	}
 
