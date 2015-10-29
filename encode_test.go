@@ -10,25 +10,78 @@ import (
 	"github.com/osamingo/boolconv"
 )
 
-func TestGenerateMutation(t *testing.T) {
+func TestGenerateColumnQualifiersMutation(t *testing.T) {
 
 	// family is empty
-	if _, err := GenerateMutation("", time.Now(), nil); err == nil {
+	if _, err := GenerateColumnQualifiersMutation("", time.Now(), ""); err == nil {
+		t.Error("error isn't occurred")
+	}
+
+	// slice is empty
+	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), ""); err == nil {
+		t.Error("error isn't occurred")
+	}
+
+	// slice is empty
+	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), []string{}...); err == nil {
+		t.Error("error isn't occurred")
+	}
+
+	s := []string{"hoge", "fuga", "foo", "bar"}
+
+	ret, err := GenerateColumnQualifiersMutation("fc", time.Now(), s...)
+	if err != nil {
+		t.Error("failed to GenerateColumnQualifiersMutation. msg =", err)
+	}
+
+	ops := reflect.ValueOf(ret).Elem().FieldByName("ops")
+	if ops.Len() != 4 {
+		t.Errorf("expected ops length is %d got %d", 4, ops.Len())
+	}
+
+	for i := 0; i < ops.Len(); i++ {
+
+		o := ops.Index(i).Elem().Field(0).Elem().Elem().Field(0).Elem()
+		c := o.FieldByName("ColumnQualifier").Bytes()
+		v := o.FieldByName("Value").Bytes()
+
+		if v != nil {
+			t.Error("value isn't nil")
+		}
+
+		notFound := true
+		for i := range s {
+			if s[i] == string(c) {
+				notFound = false
+			}
+		}
+
+		if notFound {
+			t.Error("column qualifier is not found")
+		}
+
+	}
+}
+
+func TestGenerateColumnsMutation(t *testing.T) {
+
+	// family is empty
+	if _, err := GenerateColumnsMutation("", time.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct is nil
-	if _, err := GenerateMutation("fc", time.Now(), nil); err == nil {
+	if _, err := GenerateColumnsMutation("fc", time.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// struct hasn't fields
-	if _, err := GenerateMutation("fc", time.Now(), struct{}{}); err == nil {
+	if _, err := GenerateColumnsMutation("fc", time.Now(), struct{}{}); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// filed is unsupported type
-	if _, err := GenerateMutation("fc", time.Now(), struct {
+	if _, err := GenerateColumnsMutation("fc", time.Now(), struct {
 		S map[string]interface{} `bigtable:"wrong"`
 	}{
 		map[string]interface{}{
@@ -69,12 +122,9 @@ func TestGenerateMutation(t *testing.T) {
 		TNonTag:  "test3",
 	}
 
-	// set prefix
-	ColumnQualifierPrefix = "pre"
-
-	ret, err := GenerateMutation("fc", time.Now(), &s)
+	ret, err := GenerateColumnsMutation("fc", time.Now(), &s)
 	if err != nil {
-		t.Error("failed to Stom. msg =", err)
+		t.Error("failed to GenerateColumnsMutation. msg =", err)
 	}
 
 	ops := reflect.ValueOf(ret).Elem().FieldByName("ops")
@@ -90,74 +140,74 @@ func TestGenerateMutation(t *testing.T) {
 
 		switch string(c) {
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tstr":
+		case "tstr":
 			vv := string(v)
 			if vv != "test1" {
 				t.Errorf("expected %s got %s", "test1", vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint":
+		case "tint":
 			var vv int64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if int(vv) != 100 {
 				t.Errorf("expected %d got %d", 100, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tuint":
+		case "tuint":
 			var vv uint64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if uint(vv) != 200 {
 				t.Errorf("expected %d got %d", 200, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tbool":
+		case "tbool":
 			vv := boolconv.BtoB(v)
 			if vv != boolconv.True {
 				t.Errorf("expected %v got %v", boolconv.True, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tomitstr":
+		case "tomitstr":
 			vv := string(v)
 			if vv != "test2" {
 				t.Errorf("expected %s got %s", "test2", vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint8":
+		case "tint8":
 			var vv int8
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 8 {
 				t.Errorf("expected %d got %d", 8, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint16":
+		case "tint16":
 			var vv int16
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 16 {
 				t.Errorf("expected %d got %d", 16, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint32":
+		case "tint32":
 			var vv int32
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 32 {
 				t.Errorf("expected %d got %d", 32, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tint64":
+		case "tint64":
 			var vv int64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 64 {
 				t.Errorf("expected %d got %d", 64, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tfloat32":
+		case "tfloat32":
 			var vv float32
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 3.2 {
 				t.Errorf("expected %v got %v", 3.2, vv)
 			}
 
-		case ColumnQualifierPrefix + ColumnQualifierDelimiter + "tfloat64":
+		case "tfloat64":
 			var vv float64
 			binary.Read(bytes.NewBuffer(v), binary.BigEndian, &vv)
 			if vv != 6.4 {

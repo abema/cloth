@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"reflect"
-
 	"time"
 
 	"github.com/fatih/structs"
@@ -13,15 +12,26 @@ import (
 	"google.golang.org/cloud/bigtable"
 )
 
-// GenerateMutation generates Mutation from Struct.
-func GenerateMutation(family string, t time.Time, i interface{}) (m *bigtable.Mutation, err error) {
+// GenerateColumnsMutation generates Mutation from Struct.
+func GenerateColumnsMutation(family string, t time.Time, i interface{}) (m *bigtable.Mutation, err error) {
+
 	m = bigtable.NewMutation()
-	err = SetColumns(family, t, i, m)
+	err = SetColumns(family, t, m, i)
+
+	return
+}
+
+// GenerateColumnQualifiersMutation generates Mutation from Slice.
+func GenerateColumnQualifiersMutation(family string, t time.Time, s ...string) (m *bigtable.Mutation, err error) {
+
+	m = bigtable.NewMutation()
+	err = SetColumnQualifiers(family, t, m, s...)
+
 	return
 }
 
 // SetColumns sets columns of Mutation by Struct.
-func SetColumns(family string, t time.Time, i interface{}, m *bigtable.Mutation) (err error) {
+func SetColumns(family string, t time.Time, m *bigtable.Mutation, i interface{}) (err error) {
 
 	if family == "" {
 		err = fmt.Errorf("cloth: family is empty")
@@ -58,10 +68,35 @@ func SetColumns(family string, t time.Time, i interface{}, m *bigtable.Mutation)
 			break
 		}
 
-		if ColumnQualifierPrefix != "" {
-			ti.Column = ColumnQualifierPrefix + ColumnQualifierDelimiter + ti.Column
-		}
 		m.Set(family, ti.Column, bigtable.Time(t), b)
+	}
+
+	return
+}
+
+// SetColumnQualifiers sets column qualifiers of Mutation by Slice.
+func SetColumnQualifiers(family string, t time.Time, m *bigtable.Mutation, s ...string) (err error) {
+
+	if family == "" {
+		err = fmt.Errorf("cloth: family is empty")
+		return
+	}
+
+	c := make([]string, 0, len(s))
+	for i := range s {
+		if s[i] == "" {
+			continue
+		}
+		c = append(c, s[i])
+	}
+
+	if len(c) == 0 {
+		err = fmt.Errorf("cloth: slice is empty")
+		return
+	}
+
+	for idx := range c {
+		m.Set(family, fmt.Sprintf("%s", c[idx]), bigtable.Time(t), nil)
 	}
 
 	return

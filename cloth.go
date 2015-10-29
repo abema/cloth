@@ -20,9 +20,6 @@ const (
 	ColumnQualifierDelimiter = ":"
 )
 
-// ColumnQualifierPrefix is a prefix of column qualifier.
-var ColumnQualifierPrefix string
-
 // GetBigtableTagInfo gets TagInfo by a field tag.
 func GetBigtableTagInfo(tag string) (ti TagInfo) {
 

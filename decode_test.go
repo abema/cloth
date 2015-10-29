@@ -9,6 +9,36 @@ import (
 	"google.golang.org/cloud/bigtable"
 )
 
+func TestReadColumnQualifiers(t *testing.T) {
+
+	ris := []bigtable.ReadItem{
+		bigtable.ReadItem{
+			Row:    "rowkey",
+			Column: "fc:test",
+			Value:  []byte("test"),
+		},
+		bigtable.ReadItem{
+			Row:    "rowkey",
+			Column: "fc:test2",
+			Value:  []byte("test"),
+		},
+	}
+
+	cqs := ReadColumnQualifier(ris)
+
+	if len(cqs) != 2 {
+		t.Error("result length should be 2")
+	}
+
+	if cqs[0] == "test2" {
+		t.Error("[0] not equal 'test2'")
+	}
+
+	if cqs[1] == "test" {
+		t.Error("[1] not equal 'test'")
+	}
+}
+
 func TestReadItemsErrorCase(t *testing.T) {
 
 	s := struct {
