@@ -2,10 +2,12 @@
 
 [![Build Status](https://img.shields.io/circleci/project/abema/cloth/master.svg?style=flat)](https://circleci.com/gh/abema/cloth)
 [![Coverage Status](https://img.shields.io/codecov/c/github/abema/cloth/master.svg?style=flat)](https://codecov.io/github/abema/cloth)
+[![GoDoc](https://godoc.org/github.com/abema/cloth?status.svg)](https://godoc.org/github.com/abema/cloth)
+[![GitHub license](https://img.shields.io/github/license/abema/cloth.svg)](https://github.com/abema/cloth/blob/master/LICENSE)
 
 **Under development**
 
-ORM over Cloud Bigtable by Golang
+ORM over [Cloud Bigtable](https://cloud.google.com/bigtable/) by Golang
 
 ## Installation
 
@@ -39,6 +41,7 @@ const (
 	cf  = "myFamily"
 )
 
+// User data model.
 type User struct {
 	ID         string `bigtable:",rowkey"`
 	Name       string `bigtable:"name"`
@@ -162,4 +165,4 @@ func main() {
 
 ## License
 
-Released under the [MIT License](https://github.com/abema/cloth/blob/master/LICENSE).
+Released under the [MIT License](https://github.com/abema/cloth/blob/master/LICENSE)
