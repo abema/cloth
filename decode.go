@@ -5,13 +5,23 @@ import (
 	"encoding/binary"
 	"fmt"
 	"reflect"
-
 	"strings"
 
 	"github.com/fatih/structs"
 	"github.com/osamingo/boolconv"
 	"google.golang.org/cloud/bigtable"
 )
+
+// ReadColumnQualifier returns column qualifiers.
+func ReadColumnQualifier(ris []bigtable.ReadItem) (cqs []string) {
+
+	for i := range ris {
+		cs := strings.Split(ris[i].Column, ColumnQualifierDelimiter)
+		cqs = append(cqs, cs[len(cs)-1])
+	}
+
+	return
+}
 
 // ReadItems converts Mutation into Struct.
 func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
@@ -25,7 +35,7 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 		return
 	}
 
-	for _, ri := range ris {
+	for i := range ris {
 
 		for _, f := range fs {
 
@@ -36,16 +46,16 @@ func ReadItems(ris []bigtable.ReadItem, s interface{}) (err error) {
 
 			ti := GetBigtableTagInfo(t)
 			if ti.RowKey {
-				if err = setValue(f, []byte(ri.Row)); err != nil {
+				if err = setValue(f, []byte(ris[i].Row)); err != nil {
 					return
 				}
 
 				continue
 			}
 
-			cs := strings.Split(ri.Column, ColumnQualifierDelimiter)
+			cs := strings.Split(ris[i].Column, ColumnQualifierDelimiter)
 			if cs[len(cs)-1] == ti.Column {
-				if err = setValue(f, ri.Value); err != nil {
+				if err = setValue(f, ris[i].Value); err != nil {
 					return
 				}
 

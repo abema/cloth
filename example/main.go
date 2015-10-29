@@ -93,7 +93,7 @@ func main() {
 	defer client.Close()
 
 	// generate Mutation
-	mutation, err := cloth.GenerateMutation(cf, time.Now(), &user)
+	mutation, err := cloth.GenerateColumnsMutation(cf, time.Now(), &user)
 	if err != nil {
 		fmt.Println(err)
 		return
