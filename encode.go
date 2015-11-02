@@ -22,10 +22,10 @@ func GenerateColumnsMutation(family string, t time.Time, i interface{}) (m *bigt
 }
 
 // GenerateColumnQualifiersMutation generates Mutation from Slice.
-func GenerateColumnQualifiersMutation(family string, t time.Time, s ...string) (m *bigtable.Mutation, err error) {
+func GenerateColumnQualifiersMutation(family string, t time.Time, slice interface{}) (m *bigtable.Mutation, err error) {
 
 	m = bigtable.NewMutation()
-	err = SetColumnQualifiers(family, t, m, s...)
+	err = SetColumnQualifiers(family, t, m, slice)
 
 	return
 }
@@ -34,12 +34,12 @@ func GenerateColumnQualifiersMutation(family string, t time.Time, s ...string) (
 func SetColumns(family string, t time.Time, m *bigtable.Mutation, i interface{}) (err error) {
 
 	if family == "" {
-		err = fmt.Errorf("cloth: family is empty")
+		err = fmt.Errorf("cloth: family should not be empty")
 		return
 	}
 
 	if i == nil {
-		err = fmt.Errorf("cloth: struct is nil")
+		err = fmt.Errorf("cloth: struct should not be nil")
 		return
 	}
 
@@ -75,28 +75,45 @@ func SetColumns(family string, t time.Time, m *bigtable.Mutation, i interface{})
 }
 
 // SetColumnQualifiers sets column qualifiers of Mutation by Slice.
-func SetColumnQualifiers(family string, t time.Time, m *bigtable.Mutation, s ...string) (err error) {
+func SetColumnQualifiers(family string, t time.Time, m *bigtable.Mutation, slice interface{}) (err error) {
 
 	if family == "" {
-		err = fmt.Errorf("cloth: family is empty")
+		err = fmt.Errorf("cloth: family should not be empty")
 		return
 	}
 
-	c := make([]string, 0, len(s))
-	for i := range s {
-		if s[i] == "" {
-			continue
+	s := reflect.ValueOf(slice)
+	if s.Kind() != reflect.Slice {
+		err = fmt.Errorf("cloth: slice should be type slice")
+		return
+	}
+
+	if s.Len() == 0 {
+		err = fmt.Errorf("cloth: slice should not be empty")
+		return
+	}
+
+	for i := 0; i < s.Len(); i++ {
+
+		fs := structs.New(s.Index(i).Interface()).Fields()
+		if len(fs) == 0 {
+			err = fmt.Errorf("cloth: fields are not found, %v", i)
+			return
 		}
-		c = append(c, s[i])
-	}
 
-	if len(c) == 0 {
-		err = fmt.Errorf("cloth: slice is empty")
-		return
-	}
+		for _, f := range fs {
 
-	for idx := range c {
-		m.Set(family, fmt.Sprintf("%s", c[idx]), bigtable.Time(t), nil)
+			tg := f.Tag(BigtableTagName)
+			if tg == "" {
+				continue
+			}
+
+			ti := GetBigtableTagInfo(tg)
+			if ti.Qualifier && !f.IsZero() {
+				m.Set(family, fmt.Sprintf("%s", f.Value()), bigtable.Time(t), nil)
+			}
+
+		}
 	}
 
 	return

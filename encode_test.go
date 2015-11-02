@@ -10,6 +10,11 @@ import (
 	"github.com/osamingo/boolconv"
 )
 
+type CQ struct {
+	ID        string
+	Qualifier string `bigtable:"qualifier"`
+}
+
 func TestGenerateColumnQualifiersMutation(t *testing.T) {
 
 	// family is empty
@@ -17,19 +22,27 @@ func TestGenerateColumnQualifiersMutation(t *testing.T) {
 		t.Error("error isn't occurred")
 	}
 
-	// slice is empty
-	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), ""); err == nil {
+	// slice is nil
+	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), nil); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	// slice is empty
-	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), []string{}...); err == nil {
+	if _, err := GenerateColumnQualifiersMutation("fc", time.Now(), []interface{}{}); err == nil {
 		t.Error("error isn't occurred")
 	}
 
 	s := []string{"hoge", "fuga", "foo", "bar"}
 
-	ret, err := GenerateColumnQualifiersMutation("fc", time.Now(), s...)
+	ss := []*CQ{
+		&CQ{ID: "1", Qualifier: s[0]},
+		&CQ{ID: "2", Qualifier: s[1]},
+		&CQ{ID: "3", Qualifier: s[2]},
+		&CQ{ID: "4", Qualifier: s[3]},
+		&CQ{ID: "5", Qualifier: ""},
+	}
+
+	ret, err := GenerateColumnQualifiersMutation("fc", time.Now(), ss)
 	if err != nil {
 		t.Error("failed to GenerateColumnQualifiersMutation. msg =", err)
 	}
