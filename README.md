@@ -1,4 +1,10 @@
-# Cloth [![Build Status](https://img.shields.io/circleci/project/abema/cloth/master.svg?style=flat)](https://circleci.com/gh/abema/cloth) [![Coverage Status](https://img.shields.io/codecov/c/github/abema/cloth/master.svg?style=flat)](https://codecov.io/github/abema/cloth) [![GoDoc](https://godoc.org/github.com/abema/cloth?status.svg)](https://godoc.org/github.com/abema/cloth) [![GitHub license](https://img.shields.io/github/license/abema/cloth.svg)](https://github.com/abema/cloth/blob/master/LICENSE)
+# Cloth
+
+[![Build Status](https://img.shields.io/circleci/project/abema/cloth/master.svg?style=flat)](https://circleci.com/gh/abema/cloth)
+[![Coverage Status](https://img.shields.io/codecov/c/github/abema/cloth/master.svg?style=flat)](https://codecov.io/github/abema/cloth)
+[![Go Report Card](http://goreportcard.com/badge/abema/cloth)](http://goreportcard.com/report/abema/cloth)
+[![GoDoc](https://godoc.org/github.com/abema/cloth?status.svg)](https://godoc.org/github.com/abema/cloth)
+[![GitHub license](https://img.shields.io/github/license/abema/cloth.svg)](https://github.com/abema/cloth/blob/master/LICENSE)
 
 **Under development**
 
