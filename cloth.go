@@ -10,6 +10,7 @@ type TagInfo struct {
 	Ignore    bool
 	Omitempty bool
 	RowKey    bool
+	Qualifier bool
 	Column    string
 }
 
@@ -34,6 +35,10 @@ func GetBigtableTagInfo(tag string) (ti TagInfo) {
 		}
 		if ss[i] == "rowkey" && len(ss) == 1 {
 			ti.RowKey = true
+			continue
+		}
+		if ss[i] == "qualifier" && len(ss) == 1 {
+			ti.Qualifier = true
 			continue
 		}
 		if ss[i] == "omitempty" && len(ss) > 1 {
