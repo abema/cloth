@@ -84,6 +84,7 @@ func TestReadItems(t *testing.T) {
 	s := struct {
 		TNonTag  string
 		TRowKey  string  `bigtable:",rowkey"`
+		TBytes   []byte  `bigtable:"tbytes"`
 		TString  string  `bigtable:"tstr"`
 		TBool    bool    `bigtable:"tbool"`
 		TInt     int     `bigtable:"tint"`
@@ -101,12 +102,18 @@ func TestReadItems(t *testing.T) {
 	}{}
 
 	key := "thisisrowkey"
+	bstr := "bytebyte"
 	str := "hoge"
 	bl := true
 	num := 123
 	buf := &bytes.Buffer{}
 
 	ris := []bigtable.ReadItem{
+		bigtable.ReadItem{
+			Row:    key,
+			Column: "fc:tbytes",
+			Value:  []byte(bstr),
+		},
 		bigtable.ReadItem{
 			Row:    key,
 			Column: "fc:tstr",
@@ -221,6 +228,10 @@ func TestReadItems(t *testing.T) {
 
 	if s.TRowKey != key {
 		t.Errorf("expected %s got %s", key, s.TRowKey)
+	}
+
+	if string(s.TBytes) != bstr {
+		t.Errorf("expected %s got %s", bstr, s.TBytes)
 	}
 
 	if s.TString != str {
