@@ -125,6 +125,12 @@ func getBytes(f *structs.Field) ([]byte, error) {
 
 	switch f.Kind() {
 
+	case reflect.Slice:
+		if reflect.ValueOf(f.Value()).Type().Elem().Kind() == reflect.Uint8 {
+			// []byte
+			return (f.Value()).([]byte), nil
+		}
+
 	case reflect.String:
 		return []byte((f.Value()).(string)), nil
 

@@ -105,6 +105,7 @@ func TestGenerateColumnsMutation(t *testing.T) {
 	}
 
 	s := struct {
+		TBytes   []byte  `bigtable:"tbytes"`
 		TString  string  `bigtable:"tstr"`
 		TInt     int     `bigtable:"tint"`
 		TUint    uint    `bigtable:"tuint"`
@@ -120,6 +121,7 @@ func TestGenerateColumnsMutation(t *testing.T) {
 		TFloat64 float64 `bigtable:"tfloat64"`
 		TNonTag  string
 	}{
+		TBytes:   []byte("bytebyte"),
 		TString:  "test1",
 		TInt:     100,
 		TUint:    200,
@@ -141,8 +143,8 @@ func TestGenerateColumnsMutation(t *testing.T) {
 	}
 
 	ops := reflect.ValueOf(ret).Elem().FieldByName("ops")
-	if ops.Len() != 11 {
-		t.Errorf("expected ops length is %d got %d", 11, ops.Len())
+	if ops.Len() != 12 {
+		t.Errorf("expected ops length is %d got %d", 12, ops.Len())
 	}
 
 	for i := 0; i < ops.Len(); i++ {
@@ -152,6 +154,12 @@ func TestGenerateColumnsMutation(t *testing.T) {
 		v := o.FieldByName("Value").Bytes()
 
 		switch string(c) {
+
+		case "tbytes":
+			vv := string(v)
+			if vv != "bytebyte" {
+				t.Errorf("expected %s got %s", "bytebyte", vv)
+			}
 
 		case "tstr":
 			vv := string(v)

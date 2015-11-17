@@ -73,6 +73,12 @@ func setValue(f *structs.Field, val []byte) (err error) {
 
 	switch f.Kind() {
 
+	case reflect.Slice:
+		if reflect.ValueOf(f.Value()).Type().Elem().Kind() == reflect.Uint8 {
+			// []byte
+			f.Set(val)
+		}
+
 	case reflect.String:
 		f.Set(string(val))
 
