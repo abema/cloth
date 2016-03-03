@@ -1,0 +1,18 @@
+sudo: false
+language: go
+
+go:
+  - 1.5.1
+
+before_install:
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/osamingo/gochic
+
+before_script:
+  - gochic ./...
+
+script:
+  - go test -v -coverprofile=coverage.txt -covermode=count ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
