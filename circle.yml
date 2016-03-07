@@ -2,22 +2,25 @@ machine:
   environment:
     GOROOT: ${HOME}/go
     PATH: ${GOROOT}/bin:${PATH}
+    WORKSPACE: ${HOME}/.go_workspace/src/github.com/${CIRCLE_PROJECT_USERNAME}
   post:
-    - wget https://storage.googleapis.com/golang/go1.5.linux-amd64.tar.gz
-    - tar zxvf go1.5.linux-amd64.tar.gz
+    - if [[ ! -e /home/ubuntu/go/bin/go ]]; then cd /home/ubuntu; curl https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz | tar -xz; fi
+    - go version
 
 dependencies:
-  pre:
-    - go get golang.org/x/tools/cmd/cover
-    - go get github.com/tools/godep
-    - go get github.com/osamingo/gochic
+  cache_directories:
+    - /home/ubuntu/go
   override:
-    - godep restore
+    - go get -u github.com/osamingo/gochic
+    - go get -u golang.org/x/tools/cmd/cover
+  post:
+    - mkdir -p ${WORKSPACE}
+    - ln -s ${HOME}/${CIRCLE_PROJECT_REPONAME} ${WORKSPACE}/${CIRCLE_PROJECT_REPONAME}
 
 test:
   pre:
-    - gochic ./...
+    - cd ${WORKSPACE}/${CIRCLE_PROJECT_REPONAME} && gochic .
   override:
-    - go test -v -coverprofile=coverage.txt -covermode=count ./
+    - cd ${WORKSPACE}/${CIRCLE_PROJECT_REPONAME} && go test -race -coverprofile=coverage.txt -covermode=count .
   post:
     - bash <(curl -s https://codecov.io/bash)
